@@ -24,7 +24,6 @@
   align-items: center;
   justify-content: space-between;
   padding-top: toVw(20px);
-  padding-bottom: toVw(50px);
   &-img {
     cursor: pointer;
     img {
