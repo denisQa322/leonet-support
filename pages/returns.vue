@@ -1,35 +1,18 @@
 <script lang="ts" setup>
-import { v4 as uuidv4 } from "uuid";
+import { ref } from "vue";
 
-import Select from "~/components/select.vue";
-import Input from "~/components/input.vue";
+import { v4 as uuidv4 } from "uuid";
 
 import AddIcon from "@/assets/icons/add-button.svg";
 
-const inputs = [
-  { label: "Референс", id: uuidv4() },
-  { label: "Количество", id: uuidv4() },
-  { label: "Стоимость", id: uuidv4() },
-  { label: "Дата", id: uuidv4(), type: "date" },
-];
+const reference = ref(0);
+const quantity = ref(0);
+const price = ref(0);
+const date = ref("");
 
-const returnReason = [
-  { label: "", value: "" },
-  { label: "Повреждение", value: "Повреждение" },
-  { label: "Неверное вложение", value: "Неверное вложение" },
-  { label: "Брак", value: "Брак" },
-  { label: "Б/У", value: "Б/У" },
-  { label: "Некомплект/Недостача", value: "Некомплект/Недостача" },
-];
-
-const returnStatus = [
-  { label: "", value: "" },
-  { label: "Запрос получен", value: "Запрос получен" },
-  { label: "Запрос отправлен", value: "Запрос отправлен" },
-  { label: "Ответ получен", value: "Ответ получен" },
-  { label: "Запрос на возврат", value: "Запрос на возврат" },
-  { label: "Возврат получен", value: "Возврат получен" },
-];
+const returnReason = ref("");
+const returnStatus = ref("Запрос получен");
+const sellerName = ref("");
 </script>
 
 <template>
@@ -39,15 +22,85 @@ const returnStatus = [
     </div>
     <div class="return-create">
       <div class="return-create-inputs">
-        <Input v-for="input in inputs" :key="input.id" :label="input.label" />
+        <div class="reference-input">
+          <label for="reference">Референс</label>
+          <input id="reference" v-model="reference" />
+        </div>
+        <div class="quantity-input">
+          <label for="quantity">Количество</label>
+          <input id="quantity" v-model="quantity" />
+        </div>
+        <div class="price-input">
+          <label for="price">Стоимость</label>
+          <input id="price" v-model="price" />
+        </div>
+        <div class="date-input">
+          <label for="date">Дата</label>
+          <input id="date" v-model="date" type="date" />
+        </div>
       </div>
       <div class="return-create-selects">
-        <Select selectLabel="Причина возврата" :options="returnReason" />
-        <Select selectLabel="Статус возврата" :options="returnStatus" />
+        <div class="return-reason">
+          <label>Причина возврата</label>
+          <select v-model="returnReason">
+            <option disabled value="">Выбери причину возврата</option>
+            <option>Повреждение</option>
+            <option>Неверное вложение</option>
+            <option>Брак</option>
+            <option>Б/У</option>
+            <option>Некомплект/Недостача</option>
+          </select>
+        </div>
+        <div class="seller-name">
+          <label>Поставщик</label>
+          <select v-model="sellerName">
+            <option disabled value="">Выбери поставщика</option>
+            <option>ЮГ</option>
+            <option>EMEX</option>
+            <option>РК</option>
+            <option>АП</option>
+          </select>
+        </div>
       </div>
       <button class="return-create-icon"><img :src="AddIcon" alt="" /></button>
     </div>
-    <div class="return-info"></div>
+    <div class="return-info">
+      <div class="return-reference">
+        <label>Референс</label>
+        <p>{{ reference }}</p>
+      </div>
+      <div class="return-reference">
+        <label>Количество</label>
+        <p>{{ quantity }}</p>
+      </div>
+      <div class="return-reference">
+        <label>Стоимость</label>
+        <p>{{ price }}</p>
+      </div>
+      <div class="return-reference">
+        <label>Дата</label>
+        <p>{{ date }}</p>
+      </div>
+      <div class="return-reason">
+        <label>Причина возврата</label>
+        <p>{{ returnReason }}</p>
+      </div>
+      <div class="return-status">
+        <label>Статус возврата</label>
+        <p>{{ returnStatus }}</p>
+        <select v-model="returnStatus">
+          <option disabled value="">Выбери статус</option>
+          <option>Запрос отправлен</option>
+          <option>Ответ получен</option>
+          <option>Запрос на возврат</option>
+          <option>Возврат получен</option>
+        </select>
+      </div>
+      <div class="return-seller">
+        <label>Поставщик</label>
+        <p>{{ sellerName }}</p>
+      </div>
+    </div>
   </div>
 </template>
 
@@ -60,17 +113,23 @@ const returnStatus = [
   }
   &-create {
     display: flex;
-    gap: toVw(60px);
+    gap: toVw(40px);
     align-items: center;
+    border-bottom: toVw(1px) solid #0067a4;
+    padding-bottom: toVw(25px);
     &-inputs {
       display: flex;
       justify-content: space-between;
-      gap: toVw(60px);
+      gap: toVw(40px);
     }
     &-selects {
       display: flex;
       justify-content: space-between;
-      gap: toVw(60px);
+      gap: toVw(40px);
+      .return-reason {
+        display: flex;
+        flex-direction: column;
+      }
     }
     &-icon {
       margin-left: auto;
@@ -81,6 +140,11 @@ const returnStatus = [
         width: toVw(50px);
       }
     }
+  }
+  &-info {
+    padding-top: toVw(25px);
+    display: flex;
+    justify-content: space-between;
   }
 }
 </style>
